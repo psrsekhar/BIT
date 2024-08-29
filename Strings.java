@@ -21,7 +21,7 @@ class Strings{
 		String sentence = " slkd lsd kl ldnlk  ds dl j jsld l jd  ";
 		System.out.println("Trim :" + sentence.trim());
 		
-		System.out.println("Replaced string :" + sentence.replace('d', '$');
+		System.out.println("Replaced string :" + sentence.replace('d', '$'));
 	}
 }
 
