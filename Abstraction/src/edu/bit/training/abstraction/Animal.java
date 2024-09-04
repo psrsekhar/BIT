@@ -1,11 +1,14 @@
 package edu.bit.training.abstraction;
 
-public abstract class Animal {
+public class Animal {
+	public Animal() {
+		System.out.println("Animal()....");
+	}
 	
-	//abstract method
-	public abstract void eat();
+	{
+		System.out.println("Animal anonymous block....");
+	}
 	
-	//concrete method
 	public void sleep() {
 		System.out.println("Animal is sleeping");
 	}
