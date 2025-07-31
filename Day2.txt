@@ -41,13 +41,13 @@ Reference
 -------------------------------------------------------------------------------------------------------
 Operators
 -------------------------------------------------------------------------------------------------------
-Arithmetic => +,-,*,/,% => for basic mathematical calculations
-Logical => &&, ||, ! => used to check multiple conditions
-Relational =>  <, >, >=, <=, ==, != => used for comparsion
-Assignment => =, +=, -=, *=, /=, %= => used for assigning values
-Unary => +, -, ++, --
-Shift => <<, >>, <<<, >>>  => to shift bits
-Bitwise => &, `, ^, ~ => to work on bits
-Ternary => ?: => shorthand if-else 
-instanceof() => to check relationship
+Arithmetic 	: +,-,*,/,% => for basic mathematical calculations
+Logical 	: &&, ||, ! => used to check multiple conditions
+Relational	: <, >, >=, <=, ==, != => used for comparsion
+Assignment	: =, +=, -=, *=, /=, %= => used for assigning values
+Unary		: +, -, ++, --
+Shift		: <<, >>, <<<, >>>  => to shift bits
+Bitwise		: &, |, ^, ~ => to work on bits
+Ternary		: "?:" => shorthand if-else 
+instanceof	: to check relationship or Used to check if an object is an instance of a specific class or interface
 -------------------------------------------------------------------------------------------------------
