@@ -1,0 +1,40 @@
+-----------------------------------------------------------------
+Arrays
+-----------------------------------------------------------------
+=> is a collection of fixed number of homogeneous data elements
+=> it can represent multiple values with single variable, improving readability
+=> Arrays are fized size. Once created, cannot change the size. 
+=> Note: we cannot define array size while declaration
+
+=> Single Dimensional Arrays
+	==> <type>[] <array-name>;   int[] numbers; => recommended
+	==> <type> <array-name>[];   int numbers[];
+	==> <type> []<array-name>;   int []numbers;
+
+=> Two Dimensional Arrays
+	==> <type>[][] <array-name>;   int[][] coordinates; => recommended
+	==> <type> <array-name>[][];   int coordinates[][];
+	==> <type>[] <array-name>[];   int[] coordinates[];
+	==> <type> []<array-name>[];   int []coordinates[];
+	
+=> Three Dimensional Arrays
+	==> <type>[][][] <array-name>;   int[][][] coordinates; => recommended
+	==> <type> <array-name>[][][];   int coordinates[][][];
+	==> <type>[] <array-name>[][];   int[] coordinates[][];
+	==> <type>[][] <array-name>[];   int[][] coordinates[];
+	
+	
+<type>[] <objectname> = new <type>[size];
+         (OR)
+<type>[] <objectname>;
+<objectname> = new <type>[size];
+
+
+<type>[] <objectname> = new <type>;
+NegativeArraySizeExcemption
+Allowed types for Size: byte, short, int, char
+Max Size: 2147483647
+
+Anonymous Arrays
+	=> new <type>[size];	=> new int[5];
+	=> new <type>[size]{}; 	=> new int[]{10, 20};
