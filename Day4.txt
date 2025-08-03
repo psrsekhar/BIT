@@ -36,5 +36,5 @@ Allowed types for Size: byte, short, int, char
 Max Size: 2147483647
 
 Anonymous Arrays
-	=> new <type>[size];	=> new int[5];
-	=> new <type>[size]{}; 	=> new int[]{10, 20};
+	=> new <type>[size];	==> new int[5];
+	=> new <type>[size]{}; 	==> new int[]{10, 20};
