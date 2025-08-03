@@ -33,9 +33,3 @@ Data Hiding
 -----------------------------------------------------------------------------
 private Instance Fields
 -----------------------------------------------------------------------------
-Method Hiding
-Encapsulation
-Polymorphism
-Inheritance
-Access Modifiers
-Abstraction
