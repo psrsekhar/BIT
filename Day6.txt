@@ -40,9 +40,11 @@ class Main{
 -----------------------------------------------------------------------------
 Inheritance
 -----------------------------------------------------------------------------
+Inheritance is a mechanism in Java where one class (child/subclass) inherits the fields and methods of another class (parent/superclass)
+This helps in code reusability and method overriding
 
+=> Single Inheritance: One class inherits from one parent class
+=> Multilevel Inheritance: One class inherits from a class, and another class inherits from that subclass
+=> Hierarchical Inheritance: Multiple child classes inherit from the same parent class
+=> Multiple Inheritance (Not supported using classes in Java): Java doesn't support multiple inheritance with classes to avoid the Diamond Problem, but it is allowed through interfaces.
 -----------------------------------------------------------------------------
-Polymorphism
-Method Hiding
-Access Modifiers
-Abstraction
