@@ -14,13 +14,10 @@ public class Counter extends Thread {
 	@Override
 	public void run() {
 		for(int i=1; i<= maxToken; i++) {
-			System.out.println(this.couterName + "\t:\tToken Number:\t" + this.token);
-			token++;
+			synchronized(lock) {
+				System.out.println(this.couterName + "\t:\tToken Number:\t" + this.token);
+				token++;
+			}
 		}
-		Thread.currentThread().interrupt();
 	}
 }
-
-
-
-

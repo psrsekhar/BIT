@@ -10,6 +10,15 @@ public class Main {
 		fCounter.start();
 		sCounter.start();
 		tCounter.start();
+		
+		try {
+			fCounter.join();
+			sCounter.join();
+			tCounter.join();
+		}catch(InterruptedException ex) {
+			ex.printStackTrace();
+		}
+		System.out.println("Maximum tokens reached....");
 	}
 
 }

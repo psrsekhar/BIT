@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>TokenGeneation</name>
+	<name>JavaLang</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,7 +16,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1754588108873</id>
+			<id>1755503446966</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
