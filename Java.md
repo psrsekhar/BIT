@@ -327,8 +327,3 @@ A comprehensive bank of frequently asked Java interview questions. Use this docu
 Feel free to contribute by adding solutions or explanations for each question as needed!
 
 ***
-
-**License**
-Specify your project's license here if needed.
-
-***
