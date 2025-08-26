@@ -332,27 +332,3 @@ Feel free to contribute by adding solutions or explanations for each question as
 Specify your project's license here if needed.
 
 ***
-
-This template follows best practices as recommended for GitHub README files.[^1][^2][^6]
-<span style="display:none">[^3][^4][^5][^7][^8][^9]</span>
-
-<div style="text-align: center">⁂</div>
-
-[^1]: https://github.com/othneildrew/Best-README-Template
-
-[^2]: https://gist.github.com/DomPizzie/7a5ff55ffa9081f2de27c315f5018afc
-
-[^3]: https://git.webis.de/code-generic/code-project-templates/project-template-java/-/blob/master/Readme.md
-
-[^4]: https://www.makeareadme.com
-
-[^5]: https://doc.nuxeo.com/corg/readme-template/
-
-[^6]: https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/
-
-[^7]: https://github.com/template-repository/maven-template-repository
-
-[^8]: https://readme.so
-
-[^9]: https://rahuldkjain.github.io/gh-profile-readme-generator/
-
