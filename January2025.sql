@@ -48,9 +48,10 @@ create table if not exists ifi.movie(
     language_id int not null,
     -- foreign key constraints
     constraint movie_director_id_fk foreign key(director_id) references ifi.movie_crew(id) 
-    on update cascade on delete cascade,
+    on update cascade on delete cascade, -- restrict / set null / cascade
     constraint movie_language_id_fk foreign key(language_id) references ifi.language(id) 
-    on update cascade on delete cascade
+    on update cascade on delete cascade,
+    check (rating >= 0.0 && rating <= 10.0) -- validation
 )default character set = utf8mb4 collate utf8mb4_0900_ai_ci;
 
 create table if not exists ifi.movie_awards(
@@ -150,7 +151,8 @@ insert into ifi.movie_crew (name, role_id, email, phone_number) values
 ('Lokesh Kanagaraj', 4, 'lokesh@cinema.com', '9333444455'),
 -- Music Directors
 ('Anirudh Ravichandran', 6, 'anirudh@cinema.com', '9444555566'),
-('A R Rahman', 6, 'rahman@cinema.com', '9555666677');
+('A R Rahman', 6, 'rahman@cinema.com', '9555666677'),
+('M M Keeravani', 6, 'keeravani@cinema.com', '9666000000');
 
 insert into ifi.movie
 (title, released_on, rating, collection, director_id, cast, language_id) values
@@ -170,41 +172,35 @@ insert into ifi.movie
 
 insert into ifi.movie_awards
 (movie_id, category_id, awarded_on, awarded_to, awarded_by) values
--- Baahubali
-(1, 1, 2016, 9, 2),   -- Best Film → Rajamouli → National Awards
-(1, 4, 2016, 9, 3),   -- Best Director → Rajamouli → Film Fare
-(1, 5, 2016, 14, 3),  -- Best Music → A R Rahman → Film Fare
--- RRR
-(2, 1, 2023, 9, 1),   -- Best Film → Oscar
-(2, 4, 2023, 9, 2),   -- Best Director → National Awards
--- Leo
-(3, 2, 2024, 4, 4),   -- Best Actor → Vijay → SIIMA
-(3, 5, 2024, 13, 3),  -- Best Music → Anirudh → Film Fare
--- Vikram
-(5, 2, 2023, 4, 4),   -- Best Actor → Vijay → SIIMA
-(5, 5, 2023, 13, 3),  -- Best Music → Anirudh → Film Fare
--- KGF Chapter 2
-(7, 1, 2023, 10, 2),  -- Best Film → Prashanth Neel → National Awards
-(7, 2, 2023, 2, 3),   -- Best Actor → Yash → Film Fare
--- Yeh Jawaani Hai Deewani
+(1, 1, 2016, 9, 2),    -- Best Film → Rajamouli → National Awards
+(1, 4, 2016, 9, 3),    -- Best Director → Rajamouli → Filmfare
+(1, 5, 2016, 15, 3),   -- Best Music → M M Keeravani → Filmfare
+(2, 4, 2023, 9, 2),    -- Best Director → Rajamouli → National Awards
+(3, 2, 2024, 4, 4),    -- Best Actor → Vijay → SIIMA
+(3, 5, 2024, 13, 3),   -- Best Music → Anirudh → Filmfare
+(5, 2, 2023, 4, 4),    -- Best Actor → Vijay → SIIMA
+(5, 5, 2023, 13, 3),   -- Best Music → Anirudh → Filmfare
+(7, 2, 2023, 2, 3),    -- Best Actor → Yash → Filmfare
 (8, 2, 2014, 3, 3);   -- Best Actor → Ranbir → Film Fare
 
 -- mysql version
 select @@version; 
 select version();
+
+-- selecting constants
 select 2; -- prints table with 2 as column and 2 as a row value
 select 2+3; -- prints table with (2+3) as column and 5 as a row value
 
--- to get all rows from a table
+-- to get all rows from a table (all languages)
 select * from ifi.language;
 
--- to get selected columns from a table
+-- to get selected columns from a table (Only language names)
 select name from ifi.language;
 
--- get columns based on a condition (filtering)
+-- get columns based on a condition (filtering) : languages with id ≥ 5
 select name from ifi.language where id >= 5;
 
--- get rows based on pattern
+-- get rows based on pattern : languages starting with ‘T’
 select name from ifi.language where name like 'T%';
 
 -- movies released after 2020
@@ -224,7 +220,7 @@ inner join
 (select title, released_on, rating, language_id from ifi.movie)b
 ON a.id = b.language_id;
 
--- to get all movies with award informations (left join)
+-- to get all movies and award information if any (left join)
 select a.id, a.title, a.released_on, a.rating, b.category_id, b.awarded_on, b.awarded_to, 
 b.awarded_by  from
 (select id, title, released_on, rating from ifi.movie)a
@@ -239,14 +235,6 @@ right join
 (select id, name from ifi.language)b
 ON a.language_id = b.id;
 
--- to get movies with out awards
-select a.id, a.title, a.released_on, a.rating, b.category_id, b.awarded_on, b.awarded_to, 
-b.awarded_by, b.movie_id  from
-(select id, title, released_on, rating from ifi.movie)a
-left join
-(select movie_id, category_id, awarded_on, awarded_to, awarded_by from ifi.movie_awards)b
-on a.id = b.movie_id;
-
 -- to get movies with award full information
 select g.id, g.title, g.released_on, g.rating, g.category_id, h.category_name, 
 g.awarded_on, g.awarded_to, g.crew_name, g.awarded_by, g.awarded_by_name from
@@ -257,7 +245,7 @@ c.awarded_by, d.awarded_by_name from
 (select a.id, a.title, a.released_on, a.rating, b.category_id, b.awarded_on, b.awarded_to, 
 b.awarded_by  from
 (select id, title, released_on, rating from ifi.movie)a
-inner join
+inner join 
 (select movie_id, category_id, awarded_on, awarded_to, awarded_by from ifi.movie_awards)b
 on a.id = b.movie_id)c
 inner join
@@ -285,7 +273,7 @@ select avg(rating) as average_rating from ifi.movie;
 select max(rating) as top_rating from ifi.movie;
 
 -- least rated movie
-select min(rating) as top_rating from ifi.movie;
+select min(rating) as lowest_rating from ifi.movie;
 
 -- number of movies released in each year (group by)
 select released_on, count(title) as movie_count from ifi.movie group by released_on;
@@ -325,6 +313,15 @@ select id, title, collection, rating from ifi.movie order by collection desc lim
 -- second highest collected movie
 select id, title, collection, rating from ifi.movie order by collection desc limit 1 offset 1;
 
+-- to get movies with out awards
+select a.id, a.title, a.released_on, a.rating, b.category_id, b.awarded_on, 
+b.awarded_to, b.awarded_by, b.movie_id  from
+(select id, title, released_on, rating from ifi.movie)a
+left join
+(select movie_id, category_id, awarded_on, awarded_to, awarded_by 
+from ifi.movie_awards)b
+on a.id = b.movie_id where b.movie_id is null;
+
 -- string functions in mysql
 select concat("samantha", "sairam"); -- to append two strings
 select concat_ws("-", "samantha", "sairam"); -- to append string with seperator
@@ -354,19 +351,146 @@ select day(curdate()); -- to get current day
 select month(curdate()); -- to get current month
 select year(curdate()); -- to get current year
 select week(curdate()); --  to get week number in a year (1-52)
+select curdate() as joining_date, date_add(curdate(), INTERVAL 29 DAY) 
+as expires_on; -- to add days to a date
+-- difference between 2 days
+select datedif(curdate(), date_add(curdate(), INTERVAL 29 DAY));
+
+-- Date & Time formatting
+select concat_ws("-",day(curdate()), month(curdate), year(curdate)); -- 30 December 2025
+select date_format(curdate(), '%d %M %Y'); -- 30 December 2025
+select date_format(curdate(), '%M %d %Y %p'); -- December 30 2025 A.M
+
+select id, title from ifi.movie where id = 2;
+select id, movie_id from ifi.movie_awards where movie_id = 2;
+
+-- update a value in row
+update ifi.movie set collection = 94000000 where id = 2;
+
+-- delete a row from table
+delete from ifi.movie where id = 2;
+
+-- encryption on secrets
+create table if not exists ifi.user_login(
+	username varchar(50) not null primary key,
+    password text not null,
+    status boolean default true
+);
+insert into ifi.user_login (username, password) 
+values ("samantha", md5("Duck@!4#"));
+select *from ifi.user_login where username = "samantha" and password = md5("Duck@!4#");
+-- user prievillege commands
+
+-- creating a user in mysql server
+create user 'samantha' identified by 'Duck@!4#';
+create user 'sairam'@'localhost' identified by 'Duck@!4#';
+
+-- granting select and insert access to user on a specific table in a database
+grant select, insert on ifi.movie to 'samantha';
+
+-- granting full access to a user on server
+grant select, insert, update, drop, delete on *.* to 'sairam';
+
+-- to get access information of an user
+show grants for 'sairam';
+
+-- remove access for a user
+revoke all privileges, grant option from 'sairam';
+
+-- to get movie information with director name
+select a.id, a.title, a.director_id, b.name as director_name from
+(select id, title, director_id from ifi.movie)a
+inner join
+(select id, name from ifi.movie_crew)b
+on a.director_id = b.id;
+
+-- best practice for join (optimization)
+select a.id, a.title, a.director_id, b.name as director_name from
+ifi.movie a inner join ifi.movie_crew b on a.director_id = b.id;
+
+-- to get movie with cast information
+select a.id, a.title, b.name as cast_name from
+ifi.movie a inner join ifi.movie_crew b on find_in_set(a.cast, b.id) > 0;
+
+create table if not exists ifi.movie_cast(
+	movie_id int not null,
+	crew_id int not null,
+    constraint movie_cast_movie_id_fk foreign key(movie_id) references ifi.movie(id) 
+    on update restrict on delete restrict,
+    constraint movie_crew_id_fk foreign key(crew_id) references ifi.movie_crew(id) 
+    on update restrict on delete restrict    
+)default character set = utf8mb4 collate utf8mb4_0900_ai_ci;
 
 
+-- un normalized table
+create table if not exists ifi.orders(
+	order_id int not null auto_increment,
+    order_amount decimal (5,1) not null,
+    customer_name varchar(100) not null,
+    customer_id int not null,
+    products_id text not null, -- comma seperated product ids
+    products_name text not null, -- comma seperated product names
+    products_price text not null, -- comma seperated product price
+    address text not null,
+    phone_number bigint not null,
+    ordered_on timestamp default current_timestamp
+);
 
+-- Problems
+   -- redundant customer and product data
+   -- foreign key values (product_id, product_price, product_name) stored as csv
+   -- difficult to perform DML operations (update, delete,..)
 
+-- Normalization (1NF, 2NF, 3NF)
+create table if not exists ifi.customers(
+	id int not null auto_increment,
+    customer_name varchar(100) not null,
+    phone_number bigint not null
+);
+create table if not exists ifi.customer_address(
+	id int not null auto_increment,
+	customer_id int not null,
+	address text not null,
+    foreign key(customer_id) references ifi.customers(id) 
+    on update restrict on delete restrict   
+);
+create table if not exists ifi.products(
+   id int not null auto_increment,
+   name varchar(100) not null,
+   price decimal (5,1) not null
+);
+create table if not exists ifi.orders(
+	order_id int not null auto_increment,
+    order_amount decimal (5,1) not null,
+    customer_id int not null,
+    ordered_on timestamp default current_timestamp,
+    customer_address_id int not null,
+    foreign key(customer_id) references ifi.customers(id) 
+    on update restrict on delete restrict,
+    foreign key(products_id) references ifi.products(id) 
+    on update restrict on delete restrict,
+    foreign key(customer_address_id) references ifi.customer_address(id) 
+    on update restrict on delete restrict
+);
+create table if not exists ifi.order_items(
+	order_id int not null,
+    product_id int not null,
+    foreign key(order_id) references ifi.orders(id) 
+    on update restrict on delete restrict,
+    foreign key(product_id) references ifi.products(id) 
+    on update restrict on delete restrict
+);
 
+-- A(Atomicity) C(Consistency) I(Isolation) D(Durability) Properties
 
+-- Atomicity (TCL: Commit and Rollback) -> All or nothing
+START TRANSACTION;
+  insert into ifi.orders values ();
+  insert into ifi.order_items values ();
+COMMIT;
 
+-- Consistency (foreign key references)
 
+-- Isolation 
 
-
-
-
-
-
-
-
+-- Durability -> once committed, data is permanent
