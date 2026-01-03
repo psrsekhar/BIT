@@ -1,0 +1,238 @@
+Coding Guidelines
+-----------------
+
+Naming conventions
+------------------
+
+  Element	  Convention		    Example
+  ---------------------------------------------------------
+  Class		  PascalCase		    OrderService
+  Method	  camelCase		      orderItems()
+  Variable	camelCase		      orderId
+  Constant	UPPER_SNAKE_CASE  MAX_DISCOUNT
+  Package	  lowercase		      com.bit.libraryapp
+ -----------------------------------------------------------
+
+  Naming conventions make the code more readable and maitainable.
+
+Code formatting
+---------------
+Code formatting improves the readability of the code and reduces the bugs.
+
+
+package goibibo.demo.example;
+
+class Account {
+	String accountNumber;
+	double balance;
+
+	Account(String accountNumber, double balance) {
+		this.accountNumber = accountNumber;
+		this.balance = balance;
+	}
+
+	public void deposit(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Amount must be multiples of 100s");
+		} else {
+			balance = balance + amount;
+		}
+	}
+
+	public String toString() {
+		return "Account[accountNumber=" + accountNumber + ", balance=" + balance + 
+"]";
+	}
+}
+
+Validation
+----------
+Validation ensures user input or data is correct before processing. With this 
+validation we are making sure that the data is proper which is getting saved in 
+the data store.
+
+class UserService {
+  public void registerUser(String email) {
+    if (email == null || !email.contains("@")) {
+      throw new IllegalArgumentException("Invalid email address");
+    } else {
+      System.out.println("User registration success with email : " + email);
+    }
+  }
+}
+
+Error handling
+--------------
+Error handling make sure that application terminates normally. That means it 
+prevents application crashes and provides more meaningful and understandable 
+information.
+
+class PaymentService {
+  public void processPayment(double amount) {
+    try {
+      if (amount <= 0) {
+        throw new IllegalArgumentException("Invalid amount");
+      } 
+      System.out.println("Payment is processed with the amount : " + amount);
+    } catch (Exception e) {
+      System.out.println("Payment processing is failed");
+    }
+  }
+}
+
+For better handling we have to use custom exceptions.
+
+class PaymentProcessingException extends Exception {
+  PaymentProcessingException(String desc) {
+    super(desc);
+  }
+}
+
+class PaymentService {
+  public void processPayment(double amount) {
+    try {
+      if (amount <= 0) {
+        throw new PaymentProcessingException("Invalid amount");
+      } 
+      System.out.println("Payment is processed with the amount : " + amount);
+    } catch (PaymentProcessingException e) {
+      System.out.println("Payment processing is failed");
+    } catch (Exception e) {
+      System.out.println("Some unknown exception raised");
+    }
+  }
+}
+
+Resource closing
+----------------
+It is highly recommended to close the resources to avoid memory leaks and 
+database connection issues.
+
+Resources that must be closed..
+  - Files
+  - Streams
+  - Sockets
+  - Database connections
+
+Example for without resource closing (Bad practice)
+---------------------------------------------------
+import java.io.*;
+class Test {
+  public static void main(String[] args) throws Exception {
+    FileReader fr = new FileReader("orders.txt");
+    FileWriter fw = new FileWriter("custom-orders.txt");
+    int i = fr.read();
+    while (i != -1) {
+      fw.write(i);
+      i = fr.read();
+    }
+    fw.flush();
+    System.out.println("Task is done.");
+  }
+}
+  FileReader and FileWriter are not closed in this example.
+
+Example for resource closing (try with resources - Good practice) 
+-----------------------------------------------------------------
+import java.io.*;
+class Test {
+  public static void main(String[] args) {
+    try (FileReader fr = new FileReader("orders.txt"); FileWriter fw = new 
+FileWriter("custom-orders2.txt")) {
+      int i = fr.read();
+      while (i != -1) {
+        fw.write(i);
+        i = fr.read();
+      }  
+    } catch (Exception e) {
+      System.out.println("Exception raised while reading from or writing to the 
+file");
+    }
+  }
+}
+
+If we use try with resources then the resources will be closed automatically 
+(AutoCloseble resources) once if the control reaches end of the try block either 
+normally or abnormally. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

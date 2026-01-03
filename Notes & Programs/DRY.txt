@@ -1,0 +1,38 @@
+DRY Principle (Don't Repeat Yourself)
+-------------------------------------
+
+This principle tells us to avoid duplication of the logic, code and data.
+
+class OrderService {
+  public double calculateTax(double price) {
+    return price * 0.18;
+  }
+}
+
+class InvoiceService {
+  public double calculateTax(double price) {
+    return price * 0.18;
+  }
+}
+
+In this example calculateTax logic is duplicated. 
+
+Without duplication
+-------------------
+class TaxCalculator {
+  public static double calculateTax(double price, double percentage) {
+    return price * percentage;
+  }
+}
+
+class OrderService {
+  public double calculateOrderAmount(double price) {
+    return price + TaxCalculator.calculateTax(price, 0.18);
+  }
+}
+
+class InvoiceService {
+  public double calculateInvoiceAmount(double price) {
+    return price + TaxCalculator.calculateTax(price, 0.18);
+  }
+}

@@ -1,0 +1,77 @@
+KISS Principle (Keep It Simple, Stupid)
+---------------------------------------
+This principle tells that software should be designed and implemented in the simplest way possible.
+
+Avoid unnecessary complexity, over-engineering.
+
+Simple solutions are easy to understand and easy to maintain.
+
+Without KISS principle
+----------------------
+import java.util.stream.IntStream;
+class MathUtils {
+  public static int factorial(int n) {
+    return IntStream.rangeClosed(1, n).reduce(1, (a, b) -> a * b);
+  }
+}
+
+With KISS principle
+----------------------
+class MathUtils {
+  public static int factorial(int n) {
+    int factorial = 1;
+    for (int j = n; j >= 1; j--) {
+      factorial = factorial * j;
+    }
+    return factorial;
+  }
+}
+
+//Without KISS principle
+if (input != null && !input.isEmpty() && input.trim().length() > 0) {
+  // process the request
+} else {
+  throw new IllegalArgumentException("Invalid user input");
+}
+
+//With KISS principle
+if (input == null || input.isEmpty()) {
+  throw new IllegalArgumentException("Invlaid user input");
+} 
+// process the request
+
+//Without KISS principle
+class PaymentService {
+	public void processPayment(double amount, String method) {
+		if (method.equalsIgnoreCase("CARD")) {
+			if (amount > 0) {
+				System.out.println("Connecting to Card Gateway..");
+				//Connecting logic
+				System.out.println("Payment processed using Card : " + amount);
+			}
+		} else if (method.equalsIgnoreCase("UPI")) {
+			if (amount > 0) {
+				System.out.println("Connecting to UPI Gateway");
+				//Connecting logic
+				System.out.println("Payment processed using UPI : " + amount);
+			} else {
+				System.out.println("Invalid payment method");
+			}
+		}
+	}
+}
+
+//With KISS principle
+interface PaymentService {
+	void processPayment(double amount, String method);
+}
+
+class CardPayment implements PaymentService {
+	public void processPayment(double amount, String method) {
+	}	
+}
+
+class UpiPayment implements PaymentService {
+	public void processPayment(double amount, String method) {	
+	}
+}

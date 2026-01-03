@@ -1,0 +1,141 @@
+SOLID principles
+----------------
+SOLID principles defines 5 core duidelines for object oriented design.
+
+1. Single Responsibility
+2. Open/Closed 
+3. Liskov Substitution
+4. Interface segregation
+5. Dependency Inversion
+
+Applying these principles in Java makes the code more extensible, maintainable and testable.
+
+1. Single Responsibility Principle
+----------------------------------
+A class should have only one reason to change.
+
+Without SRP
+-----------
+class ProductService {
+  void addProduct(Product product);
+  void updateProduct(int productId, Product product);
+  void sendEmail(String message);
+  void sendSms(String message);
+}
+
+The above class is doing multiple things.
+
+With SRP
+--------
+class ProductService {
+  addProduct();
+  updateProduct();
+}
+
+class EmailService {
+  sendEmail(String message);
+}
+
+class SmsService {
+  sendSms(String message);
+}
+
+Here each class is having only one reason to change.
+
+2. Open/Closed Principle (OCP)
+------------------------------
+Our code should be open for extension and closed for modification.
+
+We usually achieve this by designing interfaces and abstract classes.
+
+interface Discount {
+  void apply(double price);
+}
+
+class NoDiscount implements Discount {
+  public void apply(double price) {
+    System.out.println("No discount : " + price);
+  }
+}
+
+class SeasonalDiscount implements Discount {
+  public void apply(double price) {
+    System.out.println("Discount : " + (price * 0.1));
+  }
+}
+
+We can add a new Discount type without modifying any of the existing classes.
+
+3. Liskov Substitution Principle (LSP)
+--------------------------------------
+As per this principle subtypes must be substitutable for their base types.
+
+class ShoppingCart {
+  private PaymentStrategy paymentStrategy;
+
+  ShoppingCart(PaymentStrategy paymentStrategy) {
+    this.paymentStrategy = paymentStrategy;
+  }
+
+  public void checkout(double amount) {
+    paymentStrategy.pay(amount);
+  }
+}
+
+Here, PaymentStrategy (base type) is substitutable with any of its subtypes like PaypalPaymentStrategy, UpiPaymentStrategy, etc.
+
+4. Interface Segregation Principle (ISP)
+----------------------------------------
+Clients should not be forced to depend on the methods they don't want to use.
+
+
+In the above example WindowListener is forcing to write all the methods in our class whether we are interested or not.
+
+In this context, we can use WindowAdapter abstract class to focus only on the required methods.
+
+interface Machine {
+  void print();
+  void scan();
+  void fax();
+}
+
+class SimplePrinter implements Machine
+{
+  public void print() {
+    //logic to print
+  }
+  public void scan() {
+    
+  }
+  public void fax() {
+    
+  }
+}
+
+SimplePrinter is forced by Machine to implement all the methods.
+
+//Segregated interfaces
+
+Dependency Inversion Principle (DIP)
+------------------------------------
+This principle tells that depend on abstraction but not on concrete implementation.
+
+interface MessageService {
+  void sendMessage(String message);
+}
+
+class SMSService implements MessageService {
+  public void sendMessage(String message) {
+    System.out.println("SMS sent : " + message);
+  }
+}
+
+class Notification {
+  private MessageService messageService;
+  Notification(MessageService messageService) {
+    this.messageService = messageService;
+  }
+  public void notifyUser(String message) {
+    messageService.sendMessage(message);
+  }
+}

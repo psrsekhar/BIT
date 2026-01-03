@@ -1,0 +1,492 @@
+Design Patterns
+---------------
+A design pattern is a proven, standard solution to recurring problems.
+
+The common categories of design patterns are..
+  1. Creational design patterns (Object creation)
+        Singleton
+        Factory
+        Abstract Factory
+
+  2. Structural design patterns (Object composition)
+        Adapter
+        Composite
+
+  3. Behavioral design patterns (Object interaction)
+        Strategy
+        Observer
+
+Singleton design pattern
+-------------------------
+For a class only one instance should exists.
+
+  Ex: Runtime
+      
+      Runtime r = new Runtime(); //CE: Runtime has private access in Runtime
+
+      Runtime r1 = Runtime.getRuntime();
+      Runtime r2 = Runtime.getRuntime();
+      System.out.println(r1 == r2); //true
+
+      r1.totalMemory();
+      r1.freeMemory();
+      r1.gc();
+
+Real time examples
+------------------
+1. Database Connection Pool
+
+2. Logger Utility
+
+3. Configuration Manager
+
+
+
+Factory design pattern
+----------------------
+It abstracts the object creation process from its usage.
+
+  Ex: Connection conn = DriverManager.getConnection("url", "user", "pwd");
+
+  DriverManager class getConnection(---) abstracts the Connection object 
+creation process. Because this process will be varied based on driver 
+implementation.
+
+interface Notification {
+	void notifyUser(String message);
+}
+
+class EmailNotification implements Notification {
+	public void notifyUser(String message) {
+		System.out.println("Sending EMAIL: " + message);
+	}
+}
+
+class SMSNotification implements Notification {
+	public void notifyUser(String message) {
+		System.out.println("Sending SMS: " + message);
+	}
+}
+
+class PushNotification implements Notification {
+	public void notifyUser(String message) {
+		System.out.println("Sending PUSH Notification: " + message);
+	}
+}
+
+class NotificationFactory {
+	public static Notification getNotification(String type) {
+		if (type.equalsIgnoreCase("email")) {
+			return new EmailNotification();
+		} else if (type.equalsIgnoreCase("sms")) {
+			return new SMSNotification();
+		} else if (type.equalsIgnoreCase("push")) {
+			return new PushNotification();
+		}
+		throw new IllegalArgumentException("Unknown notification type: " + type);
+	}
+}
+
+public class FactoryNotificationDemo {
+	public static void main(String[] args) {
+		Notification n1 = NotificationFactory.getNotification("email");
+		n1.notifyUser("Welcome to our platform!");
+
+		Notification n2 = NotificationFactory.getNotification("sms");
+		n2.notifyUser("Your OTP is 123456");
+
+		Notification n3 = NotificationFactory.getNotification("push");
+		n3.notifyUser("You have a new message.");
+	}
+}
+
+NotificationFactory is abstracting the Notification object creation process from 
+its usage.
+
+Abstract factory design pattern
+-------------------------------
+It creates families of related objects together (factory of factories).
+
+interface Button {
+	void render();
+}
+
+interface Checkbox {
+	void render();
+}
+
+// Windows family
+class WindowsButton implements Button {
+	public void render() {
+		System.out.println("Rendering Windows Button");
+	}
+}
+
+class WindowsCheckbox implements Checkbox {
+	public void render() {
+		System.out.println("Rendering Windows Checkbox");
+	}
+}
+
+// Mac family
+class MacButton implements Button {
+	public void render() {
+		System.out.println("Rendering Mac Button");
+	}
+}
+
+class MacCheckbox implements Checkbox {
+	public void render() {
+		System.out.println("Rendering Mac Checkbox");
+	}
+}
+
+interface GUIFactory {
+	Button createButton();
+
+	Checkbox createCheckbox();
+}
+
+class WindowsFactory implements GUIFactory {
+	public Button createButton() {
+		return new WindowsButton();
+	}
+
+	public Checkbox createCheckbox() {
+		return new WindowsCheckbox();
+	}
+}
+
+class MacFactory implements GUIFactory {
+	public Button createButton() {
+		return new MacButton();
+	}
+
+	public Checkbox createCheckbox() {
+		return new MacCheckbox();
+	}
+}
+
+public class AbstractFactoryUIDemo {
+	public static void main(String[] args) {
+		GUIFactory factory = new MacFactory();
+		Button button = factory.createButton();
+		Checkbox checkbox = factory.createCheckbox();
+
+		button.render();
+		checkbox.render();
+	}
+}
+
+Adapter Design Pattern
+----------------------
+It is a bridge between incompatible interfaces.
+
+
+Composite Design Pattern
+------------------------
+We can use this design pattern to compose objects in tree structures 
+(hierarchical structure) so that clinets can treat individual objects and groups 
+uniformly.
+
+  Ex: File system representation
+
+import java.util.*;
+interface FileSystemComponent {
+  void showDetails();
+}
+
+class File implements FileSystemComponent {
+  private String name;
+
+  File(String name) {
+    this.name = name;
+  }
+  
+  public void showDetails() {
+    System.out.println("File : " + name);
+  }
+}
+
+class Folder implements FileSystemComponent {
+  private String name;
+
+  private List<FileSystemComponent> children = new ArrayList<>();
+
+  Folder(String name) {
+    this.name = name;
+  }
+
+  public void add(FileSystemComponent component) {
+    children.add(component);
+  }
+
+  public void showDetails() {
+    System.out.println("Folder : " + name);
+    for (FileSystemComponent component : children) {
+      component.showDetails();
+    }
+  }
+}
+
+class Test {
+  public static void main(String[] args) {
+    Folder myDocuments = new Folder("My Documents");
+    myDocuments.add(new File("Resume.docx"));
+    myDocuments.add(new File("Photo.jpg"));
+
+    myDocuments.showDetails();
+
+    Folder downloads = new Folder("Downloads");
+    downloads.add(new File("java-25")); 
+    downloads.add(new File("Spring-5x")); 
+
+    downloads.showDetails();
+  }
+}
+
+Strategy Design Pattern
+-----------------------
+It encapsulates interchangeble algorithms and lets you switch to your required 
+algorithm at runtime.
+
+Without strategy design pattern
+-------------------------------
+class ShoppingCart {
+  public void checkout(String paymentType, double amount) {
+    if (paymentType.equals("credit")) {
+      System.out.println("Payment is done using credit card : " + amount);
+    } else if (paymentType.equals("paypal")) {
+      System.out.println("Payment is done using paypal : " + amount);
+    } else if (paymentType.equals("upi")) {
+      System.out.println("Payment is done using UPI : " + amount);
+    } else {
+      throw new IllegalArgumentException("Invalid payment type");
+    }
+  }
+}
+class Test {
+  public static void main(String[] args) {
+    ShoppingCart cart = new ShoppingCart();
+    cart.checkout("credit", 4500.0);
+  }
+}
+
+Problems
+--------
+1. Adding a new payment method makes modifying ShoppingCart.
+
+2. Checkout logic is tightly coupled with payment logic.
+
+3. Violates Open/Closed prinple.
+
+With strategy design pattern
+----------------------------
+interface PaymentStrategy {
+  void pay(double amount);
+}
+
+class CreditCardPayment implements PaymentStrategy {
+  public void pay(double amount) {
+    System.out.println("Payment is done using credit card : " + amount);
+  }
+}
+
+class UpiPayment implements PaymentStrategy {
+  public void pay(double amount) {
+    System.out.println("Payment is done using UPI : " + amount);
+  }
+}
+
+class PaypalPayment implements PaymentStrategy {
+  public void pay(double amount) {
+    System.out.println("Payment is done using Paypal : " + amount);
+  }
+}
+
+class ShoppingCart {
+  private PaymentStrategy paymentStrategy;
+
+  ShoppingCart(PaymentStrategy paymentStrategy) {
+    this.paymentStrategy = paymentStrategy;
+  }
+
+  public void checkout(double amount) {
+    paymentStrategy.pay(amount);
+  }
+}
+
+class Test {
+  public static void main(String[] args) {
+    PaymentStrategy paymentStrategy = new PaypalPayment();
+    ShoppingCart cart = new ShoppingCart(paymentStrategy);
+    cart.checkout(4599.0);
+  }
+}
+
+Observer Design Pattern
+-----------------------
+One to many dependencies. Notify the users when the state changes.
+
+Without Observber design pattern
+--------------------------------
+class StockMarket {
+  private double price;
+
+  public void setPrice(double price) {
+    this.price = price;
+    
+    System.out.println("Email message has sent : " + price);
+    System.out.println("SMS message has sent : " + price);
+  }
+}
+
+class Test {
+  public static void main(String[] args) {
+    StockMarket sm = new StockMarket();
+    sm.setPrice(2345.0);
+  }
+}
+
+Problems
+--------
+Every time you add a new payment type (for ex, whatsapp notification), you need 
+to modify StockMarket class.
+
+Violates Open/Closed principle.
+
+Tightly coupling between StockMarket and Notification types.
+
+With Observer design pattern
+----------------------------
+import java.util.*;
+interface Observer {
+  void update(double price);
+}
+
+class EmailNotifier implements Observer {
+  public void update(double price) {
+    System.out.println("Email sent : Stock price updated to " + price);
+  }
+}
+
+class SMSNotifier implements Observer {
+  public void update(double price) {
+    System.out.println("SMS sent : Stock price updated to " + price);
+  }
+}
+
+class StockMarket {
+  private double price;
+  private List<Observer> observers = new ArrayList<>();
+
+  public void addObserver(Observer observer) {
+    observers.add(observer);
+  }
+
+  public void setPrice(double price) {
+    this.price = price;
+    notifyObservers();
+  }
+
+  public void notifyObservers() {
+    for (Observer observer : observers) {
+      observer.update(price);
+    }
+  }
+}
+
+class Test {
+  public static void main(String[] args) {
+    StockMarket stockMarket = new StockMarket();
+    stockMarket.addObserver(new EmailNotifier());
+    stockMarket.addObserver(new SMSNotifier());
+    
+    stockMarket.setPrice(4455.0);
+  }
+}
+
+Dependency Injection (DI)
+-------------------------
+DI is a way of achieving loosely coupling by injecting dependencies into a class 
+rather than creating them inside the class.
+
+It is also known as Inversion of Control (IoC).
+
+class EmailService {
+  public void sendEmail(String msg) {
+    System.out.println("Email sent : " + msg);
+  }
+}
+
+class Notification {
+  private EmailService emailService = new EmailService();
+  public void notifyUser(String msg) {
+    emailService.sendEmail(msg);
+  }
+}
+
+class Test {
+  public static void main(String[] args) {
+    Notification notification = new Notification();
+    notification.notifyUser("Stocks updated with new price");
+  }
+}
+
+In the above example Notification is tightly coupled with EmailService.
+
+interface MessageService {
+  void sendMessage(String message);
+}
+
+class EmailService implements MessageService {
+  public void sendMessage(String message) {
+    System.out.println("Email sent : " + message);
+  }
+}
+
+class SMSService implements MessageService {
+  public void sendMessage(String message) {
+    System.out.println("SMS sent : " + message);
+  }
+}
+
+class Notification {
+  private MessageService messageService;
+  
+  Notification() {
+    
+  }
+
+  // Constructor injection
+  Notification(MessageService messageService) {
+    this.messageService = messageService;
+  }
+
+  // Setter injection
+  public void setMessageService(MessageService messageService) {
+    this.messageService = messageService;
+  }
+
+  public void notifyUser(String message) {
+    messageService.sendMessage(message);
+  }
+}
+
+class Test {
+  public static void main(String[] args) {
+    //User-1
+    MessageService emailMessageService = new EmailService();
+    Notification emailNotification = new Notification(emailMessageService);
+    emailNotification.notifyUser("Stock is updated with new price");
+
+    //User-2
+    MessageService smsMessageService = new SMSService();
+    Notification smsNotification = new Notification();
+    smsNotification.setMessageService(smsMessageService);
+    smsNotification.notifyUser("Stock is updated with new price");
+  }
+}
+
+
+

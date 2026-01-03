@@ -1,0 +1,353 @@
+System Design
+-------------
+1. Revision of OOPs concepts
+	1.1 Abstraction
+	1.2 Inheritance
+	1.3 Polymorphism
+	1.4 Loosely coupling
+	1.5 High cohesion
+
+1.1 Abstraction
+---------------
+The process of highlighting the required services by hiding the complex logic of 
+their implementation is called as abstraction.
+
+interface Payment {
+  public abstract void pay(double amount);
+}
+
+User of the Payment class does not required to know the complex process of 
+payment.
+
+interface Payment {
+  public abstract void pay(double amount);
+}
+
+class CardPayment implements Payment {
+  public void pay(double amount) {
+    System.out.println("Payment is processed using card : " + amount);
+  }
+}
+
+class UPIPayment implements Payment {
+  public void pay(double amount) {
+    System.out.println("Payment is processed using UPI : " + amount);
+  }
+}
+
+class PaymentDemo {
+  public static void main(String[] args) {
+    Payment p = new CardPayment();
+    p.pay(550.00);
+
+    Payment p2 = new UPIPayment();
+    p2.pay(1099.00);
+  }
+}
+
+import java.sql.*;
+class JdbcDemo {
+  public static void main(String[] args) throws Exception {
+    Connection con = 
+DriverManager.getConnection("jdbc:postgresql://localhost:5432/indigodb", 
+"indigosa", "indigosa");
+    System.out.println(con.getClass().getName());
+    Statement st = con.createStatement();
+    System.out.println(st.getClass().getName());
+    ResultSet rs = st.executeQuery("select * from flight");
+    System.out.println(rs.getClass().getName());
+    while (rs.next()) {
+      System.out.println(rs.getString("id") + "..." + rs.getString("name") + 
+"..." + rs.getString("source") + "..." + rs.getString("destination"));
+    }
+    rs.close();
+    st.close();
+    con.close();
+  }
+}
+
+In the previous example DriverManager class getConnection() method is 
+abstracting the details of how the Connection object is getting craeted.
+
+Similarly, Connection interface createStatement() and Statement interface 
+executeQuery() methods also hiding the object creation process. These objects 
+creation process/logic will be taken care by corresponding implementation 
+classes provided by database vendors.
+
+If we are calling a method and if that method returns the object by taking care 
+of its creation logic then such type of method is called as factory method. This 
+method can be either static or non-static.
+
+  Ex: Connection con = DriverManager.getConnection(---);
+
+Inheritance
+-----------
+It is also called as Is-A relationship.
+
+The process of getting the properties and behaviours of one class to another 
+classes is called as Inheritance.
+
+With this relationship common properties and behaviours can be resued.
+
+class Payment {
+  double amount;
+}
+class CardPayment extends Payment {
+  String cardNumber;
+}
+class UPIPayment extends Payment {
+  String upiId;
+}
+
+In the previous example both CardPayment and UPIPayment are inheriting amount 
+property from Payment class.
+
+Polymorphism
+------------
+If any method behaviour is available in more than one form and execution is 
+based on the object craeted then such concept is called as polymorphism (dynamic 
+polymorphism).
+
+abstract class Payment {
+  public abstract void pay(double amount);
+}
+
+class CardPayment extends Payment {
+  public void pay(double amount) {
+    //pay using card
+  }
+}
+
+class UPIPayment extends Payment {
+  public void pay(double amount) {
+    //pay using upi id
+  }
+}
+
+In the previous example pay() method is available in more than one form - 
+CardPayment and UPIPayment.
+
+Loosely coupling
+----------------
+If a class talks to another class using an interface then it is called as 
+loosely coupling.
+
+That means, class should depend on interface and not on concrete implementation.
+
+interface Payment {
+  void pay(double amount);
+}
+class CardPayment implements Payment {
+  public void pay(double amount) {
+    System.out.println("The amount is paid using card : " + amount);
+  }
+}
+class UPIPayment implements Payment {
+  public void pay(double amount) {
+    System.out.println("The amount is paid using UPI Id : " + amount);
+  }
+}
+class Cart {
+  Payment payment;
+  Cart(Payment payment) {
+    this.payment = payment;
+  }
+  public void checkOut(double amount) {
+    payment.pay(amount);
+  }
+}
+class LooselyCouplingDemo {
+  public static void main(String[] args) {
+    Payment payment = new UPIPayment();
+    Cart cart = new Cart(payment);
+    cart.checkOut(5000.00);
+  }
+}
+
+In the previous example Cart class is loosely coupled with Payment 
+implementations. We can also plugin a new Payment type without modifying Cart 
+class.
+
+High Cohesion
+-------------
+A class should talk about only one thing.
+
+High cohesion promotes cleaner and easily maintainable code.
+
+Low cohesion
+------------
+class ProductService {
+  void addProducts();
+  void removeProducts();
+  void sendEmailNotification();
+  void sendSmsNotification();
+}
+
+The above ProductService class is doing multiple things. Hence, it is low 
+cohesion and not a good programming practice.
+
+High cohesion
+-------------
+class ProductService {
+  void addProduct(Product p);
+  Product removeProduct(Product p);
+}
+
+interface NotificationService {
+  public abstract void sendNotification(NotificationDetails nd);
+}
+
+class EmailNotificationService implements NotificationService {
+  public abstract void sendNotification(NotificationDetails nd) {
+    //Logic to send email notification
+  }
+}
+
+class SmsNotificationService implements NotificationService {
+  public abstract void sendNotification(NotificationDetails nd) {
+    //Logic to send sms notification
+  }
+}
+
+In the above example each class is talking about only one thing - High cohesion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
