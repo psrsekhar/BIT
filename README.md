@@ -1,694 +1,692 @@
-# Database Management System - MySQL
+# OBJECT ORIENTED PROGRAMMING CONCEPTS - JAVA
 
-## MySQL Interview Questions and Answers
+## Table of Contents
 
-A collection of important **MySQL interview questions and answers** for quick revision and preparation.
-
----
-
-## 1. What is MySQL?
-
-MySQL is an **open-source relational database management system (RDBMS)** that uses **SQL (Structured Query Language)** to store, manage, and retrieve data. It is widely used due to its **performance, scalability, reliability, and ease of integration** with applications.
-
----
-
-## 2. What are the different types of JOINs in MySQL?
-
-- **INNER JOIN**: Returns rows with matching values in both tables.
-- **LEFT (OUTER) JOIN**: Returns all rows from the left table and matched rows from the right.
-- **RIGHT (OUTER) JOIN**: Returns all rows from the right table and matched rows from the left.
-- **FULL OUTER JOIN**: Not directly supported in MySQL but can be achieved using `UNION`.
+1. [Introduction](#introduction)
+2. [Four Pillars of OOP](#four-pillars-of-oop)
+3. [Core Concepts](#core-concepts)
+4. [Access Modifiers](#access-modifiers)
+5. [Interview Questions & Answers](#interview-questions--answers)
+6. [Code Examples](#code-examples)
+7. [Best Practices](#best-practices)
 
 ---
 
-## 3. What is the difference between WHERE and HAVING clauses?
+## Introduction
 
-- **WHERE**: Filters rows **before grouping**.
-- **HAVING**: Filters groups/aggregates **after grouping**.
+Object-Oriented Programming (OOP) is a programming paradigm that uses **objects** and **classes** to structure code. Java is a purely object-oriented language where everything is built around these core principles.
 
----
+This document provides:
 
-## 4. What is a Primary Key in MySQL?
-
-A Primary Key is a column (or set of columns) that uniquely identifies each record in a table.
-
-- Must contain **unique values**.
-- Cannot contain **NULL**.
-- Each table can have only **one** primary key.
+- ✅ Clear explanations of all OOP concepts
+- ✅ Real-world code examples
+- ✅ Common interview questions with answers
+- ✅ GitHub repository references
+- ✅ Best practices for enterprise development
 
 ---
 
-## 5. What is a Foreign Key in MySQL?
+## Four Pillars of OOP
 
-A Foreign Key is a field in one table that refers to the **Primary Key** in another table. It maintains **referential integrity** between tables.
+### 1. Encapsulation
 
----
+**Definition:** Bundling data (variables) and methods that operate on that data within a single unit (class), while hiding internal implementation details.
 
-## 6. Difference between CHAR and VARCHAR
+**Key Points:**
 
-- **CHAR**: Fixed-length storage. Pads with spaces if data is shorter. Faster for fixed-size data.
-- **VARCHAR**: Variable-length storage. Saves only required characters. More memory efficient.
+- Use `private` for sensitive data
+- Provide `public` getters and setters
+- Prevents unauthorized access and modifications
+- Improves code maintainability
 
----
+**Code Example:**
 
-## 7. Difference between DELETE, TRUNCATE, and DROP
+```java
+public class BankAccount {
+    private String accountNumber;
+    private double balance;
 
-- **DELETE**: Removes rows based on condition, can be rolled back.
-- **TRUNCATE**: Removes all rows, resets AUTO_INCREMENT, cannot usually be rolled back.
-- **DROP**: Removes the entire table including structure. Permanent.
+    // Constructor
+    public BankAccount(String accountNumber, double initialBalance) {
+        this.accountNumber = accountNumber;
+        this.balance = initialBalance;
+    }
 
----
+    // Getter - Read-only access
+    public double getBalance() {
+        return balance;
+    }
 
-## 8. What are Indexes in MySQL?
+    // Setter with validation
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited: $" + amount);
+        }
+    }
 
-Indexes are database objects that improve **query performance** by allowing faster lookups. Best used on columns in **WHERE, JOIN, ORDER BY, GROUP BY** clauses.
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrawn: $" + amount);
+        } else {
+            System.out.println("Invalid withdrawal amount");
+        }
+    }
+}
+```
 
----
+**GitHub Reference:**
 
-## 9. What is a Transaction in MySQL?
+```
+https://github.com/yourusername/oop-java-examples/blob/main/src/main/java/encapsulation/BankAccount.java
+```
 
-A Transaction is a sequence of operations executed as a single logical unit.  
-It follows **ACID** properties:
+**Interview Question:**
+_Why is encapsulation important?_
 
-- **Atomicity** – All or nothing
-- **Consistency** – Valid state maintained
-- **Isolation** – Independent transactions
-- **Durability** – Changes persist after commit
-
----
-
-## 10. What is Normalization?
-
-Normalization is the process of structuring data to remove redundancy and improve integrity.  
-Common forms: **1NF, 2NF, 3NF, BCNF**.
-
----
-
-## 11. What is Denormalization?
-
-Denormalization combines tables to reduce joins and improve read performance. Increases redundancy intentionally for **faster queries**.
-
----
-
-## 12. What are Aggregate Functions in MySQL?
-
-- `COUNT()` – Number of rows
-- `SUM()` – Adds values
-- `AVG()` – Average value
-- `MIN()` – Minimum value
-- `MAX()` – Maximum value
-
----
-
-## 13. Difference between GROUP BY and ORDER BY
-
-- **GROUP BY**: Groups rows with identical values, used with aggregate functions.
-- **ORDER BY**: Sorts query results (ascending or descending).
+- Protects data integrity
+- Allows internal implementation changes without affecting external code
+- Follows the principle of information hiding
 
 ---
 
-## 14. AUTO_INCREMENT Attribute
+### 2. Inheritance
 
-Automatically generates a sequential number for new records (commonly used with **Primary Keys**).
+**Definition:** A mechanism by which a new class (subclass/child) inherits properties and methods from an existing class (superclass/parent).
+
+**Key Points:**
+
+- Java supports **single inheritance** using `extends`
+- Promotes code reusability
+- Creates an **IS-A** relationship
+- Supports **method overriding**
+
+**Code Example:**
+
+```java
+// Parent Class
+public class Vehicle {
+    private String color;
+    private int yearManufactured;
+
+    public Vehicle(String color, int yearManufactured) {
+        this.color = color;
+        this.yearManufactured = yearManufactured;
+    }
+
+    public void start() {
+        System.out.println("Vehicle is starting...");
+    }
+
+    public void stop() {
+        System.out.println("Vehicle is stopping...");
+    }
+
+    public String getColor() {
+        return color;
+    }
+}
+
+// Child Class
+public class Car extends Vehicle {
+    private int numberOfDoors;
+
+    public Car(String color, int yearManufactured, int numberOfDoors) {
+        super(color, yearManufactured);
+        this.numberOfDoors = numberOfDoors;
+    }
+
+    @Override
+    public void start() {
+        System.out.println("Car engine is starting with a roar!");
+    }
+
+    public void openTrunk() {
+        System.out.println("Trunk is now open");
+    }
+}
+
+// Child Class
+public class Motorcycle extends Vehicle {
+    private boolean hasSidecar;
+
+    public Motorcycle(String color, int yearManufactured, boolean hasSidecar) {
+        super(color, yearManufactured);
+        this.hasSidecar = hasSidecar;
+    }
+
+    public void wheelie() {
+        System.out.println("Performing a wheelie!");
+    }
+}
+```
+
+**Usage:**
+
+```java
+Car myCar = new Car("Red", 2023, 4);
+myCar.start();      // Car engine is starting with a roar!
+myCar.openTrunk();  // Trunk is now open
+
+Motorcycle myBike = new Motorcycle("Black", 2022, false);
+myBike.start();     // Vehicle is starting...
+myBike.wheelie();   // Performing a wheelie!
+```
+
+**GitHub Reference:**
+
+```
+https://github.com/yourusername/oop-java-examples/blob/main/src/main/java/inheritance/Vehicle.java
+```
+
+**Interview Question:**
+_What is the difference between single and multiple inheritance?_
+
+- Java supports **single inheritance** (one parent class)
+- Multiple inheritance is achieved via **interfaces** to avoid the diamond problem
+- This prevents ambiguity when calling overridden methods
 
 ---
 
-## 15. UNION vs UNION ALL
+### 3. Polymorphism
 
-- **UNION**: Combines results and removes duplicate rows.
-- **UNION ALL**: Combines results but **keeps duplicates**.
+**Definition:** The ability of an object to take on multiple forms or a method to behave differently based on context.
+
+**Types:**
+
+1. **Compile-time Polymorphism (Method Overloading)**
+2. **Runtime Polymorphism (Method Overriding)**
+
+#### Compile-time Polymorphism (Overloading)
+
+```java
+public class Calculator {
+
+    // Method 1: Add two integers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Method 2: Add two doubles
+    public double add(double a, double b) {
+        return a + b;
+    }
+
+    // Method 3: Add three integers
+    public int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    // Method 4: Add integers and double
+    public double add(int a, double b) {
+        return a + b;
+    }
+}
+```
+
+**Usage:**
+
+```java
+Calculator calc = new Calculator();
+System.out.println(calc.add(5, 10));           // 15
+System.out.println(calc.add(5.5, 10.2));       // 15.7
+System.out.println(calc.add(5, 10, 15));       // 30
+System.out.println(calc.add(5, 10.5));         // 15.5
+```
+
+#### Runtime Polymorphism (Overriding)
+
+```java
+// Parent Class
+public abstract class Animal {
+    public abstract void makeSound();
+
+    public void sleep() {
+        System.out.println("Animal is sleeping...");
+    }
+}
+
+// Child Classes
+public class Dog extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Woof! Woof!");
+    }
+}
+
+public class Cat extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Meow! Meow!");
+    }
+}
+
+public class Cow extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Moo! Moo!");
+    }
+}
+```
+
+**Usage:**
+
+```java
+Animal dog = new Dog();
+Animal cat = new Cat();
+Animal cow = new Cow();
+
+dog.makeSound();    // Woof! Woof!
+cat.makeSound();    // Meow! Meow!
+cow.makeSound();    // Moo! Moo!
+
+dog.sleep();        // Animal is sleeping...
+```
+
+**GitHub Reference:**
+
+```
+https://github.com/yourusername/oop-java-examples/blob/main/src/main/java/polymorphism/
+```
+
+**Interview Question:**
+_Difference between overloading and overriding?_
+
+| Feature           | Overloading      | Overriding                 |
+| ----------------- | ---------------- | -------------------------- |
+| Type              | Compile-time     | Runtime                    |
+| Parameters        | Must differ      | Must be same               |
+| Return Type       | Can differ       | Must be same/compatible    |
+| Access Modifier   | Can be different | Cannot be more restrictive |
+| Class Requirement | Same class       | Parent-child class         |
 
 ---
 
-## 16. Retrieve Current Date in MySQL
+### 4. Abstraction
 
-```sql
-SELECT CURDATE(); -- Returns current date
-SELECT NOW();     -- Returns current date & time
+**Definition:** The process of hiding implementation details and showing only essential features to the user.
+
+**Implementation Methods:**
+
+1. **Abstract Classes** (partial abstraction)
+2. **Interfaces** (complete abstraction)
+
+#### Abstract Class Example
+
+```java
+public abstract class PaymentProcessor {
+
+    // Abstract method - must be implemented by subclasses
+    public abstract void processPayment(double amount);
+
+    // Concrete method - common to all subclasses
+    public void validatePaymentAmount(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+    }
+
+    // Concrete method
+    public void logTransaction(String transactionId) {
+        System.out.println("Transaction logged: " + transactionId);
+    }
+}
+
+public class CreditCardProcessor extends PaymentProcessor {
+
+    private String cardNumber;
+
+    public CreditCardProcessor(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    @Override
+    public void processPayment(double amount) {
+        validatePaymentAmount(amount);
+        System.out.println("Processing credit card payment of $" + amount);
+        System.out.println("Card: " + maskCardNumber(cardNumber));
+        logTransaction("CC-" + System.currentTimeMillis());
+    }
+
+    private String maskCardNumber(String cardNumber) {
+        int length = cardNumber.length();
+        return "*".repeat(length - 4) + cardNumber.substring(length - 4);
+    }
+}
+
+public class PayPalProcessor extends PaymentProcessor {
+
+    private String email;
+
+    public PayPalProcessor(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public void processPayment(double amount) {
+        validatePaymentAmount(amount);
+        System.out.println("Processing PayPal payment of $" + amount);
+        System.out.println("Email: " + email);
+        logTransaction("PAYPAL-" + System.currentTimeMillis());
+    }
+}
+```
+
+#### Interface Example
+
+```java
+// Interface - contract without implementation
+public interface DatabaseConnection {
+    void connect();
+    void disconnect();
+    void executeQuery(String query);
+}
+
+public class MySQLConnection implements DatabaseConnection {
+
+    private String connectionString;
+
+    public MySQLConnection(String connectionString) {
+        this.connectionString = connectionString;
+    }
+
+    @Override
+    public void connect() {
+        System.out.println("Connecting to MySQL: " + connectionString);
+    }
+
+    @Override
+    public void disconnect() {
+        System.out.println("Disconnecting from MySQL");
+    }
+
+    @Override
+    public void executeQuery(String query) {
+        System.out.println("Executing MySQL query: " + query);
+    }
+}
+
+public class PostgreSQLConnection implements DatabaseConnection {
+
+    private String connectionString;
+
+    public PostgreSQLConnection(String connectionString) {
+        this.connectionString = connectionString;
+    }
+
+    @Override
+    public void connect() {
+        System.out.println("Connecting to PostgreSQL: " + connectionString);
+    }
+
+    @Override
+    public void disconnect() {
+        System.out.println("Disconnecting from PostgreSQL");
+    }
+
+    @Override
+    public void executeQuery(String query) {
+        System.out.println("Executing PostgreSQL query: " + query);
+    }
+}
+```
+
+**GitHub Reference:**
+
+```
+https://github.com/yourusername/oop-java-examples/blob/main/src/main/java/abstraction/
+```
+
+**Interview Question:**
+_When should you use abstract class vs interface?_
+
+| Criterion          | Abstract Class                     | Interface                      |
+| ------------------ | ---------------------------------- | ------------------------------ |
+| **Purpose**        | Partial abstraction                | Complete contract              |
+| **Implementation** | Can have concrete methods          | Only abstract (until Java 8)   |
+| **Inheritance**    | Single inheritance                 | Multiple inheritance           |
+| **State**          | Can have state (fields)            | Cannot have instance variables |
+| **Use Case**       | Share code between related classes | Define behavior contract       |
+
+---
+
+## Core Concepts
+
+### Constructor
+
+A constructor is a special method called when an object is instantiated.
+
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    // Default constructor
+    public Person() {
+        this.name = "Unknown";
+        this.age = 0;
+    }
+
+    // Parameterized constructor
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Copy constructor
+    public Person(Person other) {
+        this.name = other.name;
+        this.age = other.age;
+    }
+}
+```
+
+### `this` and `super` Keywords
+
+```java
+public class Employee extends Person {
+    private String employeeId;
+
+    public Employee(String name, int age, String employeeId) {
+        super(name, age);           // Call parent constructor
+        this.employeeId = employeeId; // Current class field
+    }
+}
+```
+
+### Static Members
+
+```java
+public class Counter {
+    private static int count = 0;  // Class variable
+
+    public Counter() {
+        count++;  // Shared among all instances
+    }
+
+    public static int getCount() {
+        return count;
+    }
+}
 ```
 
 ---
 
-## 17. Difference between IN and EXISTS
+## Access Modifiers
 
-- **IN**: Checks if a value exists in a given list or subquery result.
-- **EXISTS**: Checks if the subquery returns any rows (more efficient for large datasets).
+| Modifier               | Class | Package | Subclass | World |
+| ---------------------- | ----- | ------- | -------- | ----- |
+| `public`               | ✅    | ✅      | ✅       | ✅    |
+| `protected`            | ✅    | ✅      | ✅       | ❌    |
+| `default` (no keyword) | ✅    | ✅      | ❌       | ❌    |
+| `private`              | ✅    | ❌      | ❌       | ❌    |
+
+**Best Practice:** Use the most restrictive access modifier that allows functionality.
 
 ---
 
-## 18. How do you create a table in MySQL?
+## Interview Questions & Answers
 
-```sql
-CREATE TABLE student (
-  rollNo INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100),
-  marks INT
-);
+### Q1: Difference between `==` and `equals()` method?
+
+**Answer:**
+
+```java
+// == compares references
+String s1 = new String("Hello");
+String s2 = new String("Hello");
+System.out.println(s1 == s2);          // false (different objects)
+System.out.println(s1.equals(s2));     // true (same content)
+```
+
+### Q2: What is the diamond problem?
+
+**Answer:**
+
+```
+        Interface A
+           /     \
+      Interface B  Interface C
+           \     /
+        Class D
+```
+
+Java solves this through interfaces and the default method implementation.
+
+### Q3: Can a constructor be inherited?
+
+**Answer:** No, constructors cannot be directly inherited, but they can be invoked using `super()`.
+
+### Q4: What is method signature?
+
+**Answer:** Method signature = Method name + Parameters (return type is NOT part of signature).
+
+### Q5: Explain immutable objects in Java.
+
+**Answer:**
+
+```java
+public final class ImmutablePerson {
+    private final String name;
+    private final int age;
+
+    public ImmutablePerson(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}
+```
+
+### Q6: What is the difference between `final`, `finally`, and `finalize`?
+
+**Answer:**
+
+- **`final`**: Keyword - prevents modification of classes, methods, or variables
+- **`finally`**: Block - always executes after try-catch
+- **`finalize()`**: Method - called by garbage collector before object destruction
+
+### Q7: What is SOLID principle?
+
+**Answer:** Five principles for maintainable code:
+
+- **S**ingle Responsibility
+- **O**pen/Closed
+- **L**iskov Substitution
+- **I**nterface Segregation
+- **D**ependency Inversion
+
+---
+
+## Code Examples
+
+### Example 1: Complete OOP System - Bank Management
+
+```java
+// Abstract base class
+public abstract class BankAccount {
+    protected String accountNumber;
+    protected double balance;
+
+    public BankAccount(String accountNumber, double initialBalance) {
+        this.accountNumber = accountNumber;
+        this.balance = initialBalance;
+    }
+
+    public abstract void calculateInterest();
+
+    public void deposit(double amount) {
+        if (amount > 0) balance += amount;
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+}
+
+// Concrete implementation
+public class SavingsAccount extends BankAccount {
+    private double interestRate;
+
+    public SavingsAccount(String accountNumber, double initialBalance, double interestRate) {
+        super(accountNumber, initialBalance);
+        this.interestRate = interestRate;
+    }
+
+    @Override
+    public void calculateInterest() {
+        double interest = balance * interestRate / 100;
+        balance += interest;
+    }
+}
+
+// Usage
+BankAccount savingsAccount = new SavingsAccount("ACC123", 10000, 3.5);
+savingsAccount.deposit(5000);
+savingsAccount.calculateInterest();
 ```
 
 ---
 
-## 19. TRIGGER vs STORED PROCEDURE
+## Best Practices
 
-- **TRIGGER**: Automatically invoked on specific table events (INSERT, UPDATE, DELETE).
-- **STORED PROCEDURE**: Reusable code block, executes only when explicitly called.
-
----
-
-## 20. Handling NULL Values in MySQL
-
-- Use **IS NULL / IS NOT NULL** to check.
-- **IFNULL(expr, default)** replaces NULLs with default.
-- **COALESCE(expr1, expr2, …)** returns first non-null value.
+1. **Follow Single Responsibility Principle:** Each class should have one reason to change
+2. **Use Access Modifiers Wisely:** Keep fields private, expose only necessary methods
+3. **Prefer Composition over Inheritance:** Not everything needs inheritance
+4. **Use Interfaces for Contracts:** Define behavior expectations upfront
+5. **Override `toString()`, `equals()`, and `hashCode()`:** For proper object representation
+6. **Write Immutable Classes:** When possible, to prevent accidental modifications
+7. **Use Sealed Classes:** (Java 17+) For better control over inheritance
 
 ---
 
-## 21. What is a View in MySQL?
+## Conclusion
 
-A **View** is a **virtual table** based on the result of a query.
+Mastering OOP concepts is crucial for Java development. This document covers the fundamental principles with practical examples. Practice these concepts through real-world projects to solidify your understanding.
 
-- Does not store data itself.
-- Provides abstraction, simplifies queries, improves security by exposing subsets of data.
+**GitHub Repository:**
 
----
-
-## ✅ Summary
-
-This file covers:
-
-- Basic definitions
-- Keys (Primary, Foreign)
-- Joins, Aggregate functions, Transactions
-- Normalization vs Denormalization
-- Queries, Indexes, Views, Procedures
-
-# 💡 SQL Interview Questions & Answers (50 Qs)
-
-A comprehensive list of the **Top 50 MySQL SQL Interview Questions & Answers**.  
-This covers **basic, intermediate, and advanced** queries frequently asked in technical interviews.
-
----
-
-## 🔹 Section 1: Basic SQL Queries (1–15)
-
-### 1. Select all records from a table
-
-```sql
-SELECT * FROM employees;
+```
+https://github.com/yourusername/oop-java-interview-guide
 ```
 
 ---
 
-### 2. Fetch only unique department IDs from employees
+## References
 
-```sql
-SELECT DISTINCT dept_id FROM employees;
-```
-
----
-
-### 3. Get the number of employees in the table
-
-```sql
-SELECT COUNT(*) FROM employees;
-```
+- [Oracle Java Tutorials - Learning the Java Language](https://docs.oracle.com/javase/tutorial/java/concepts/)
+- [Java Language Specification](https://docs.oracle.com/javase/specs/)
+- [Effective Java by Joshua Bloch](https://www.oreilly.com/library/view/effective-java-3rd/9780134685991/)
 
 ---
 
-### 4. Fetch employee names and salaries
-
-```sql
-SELECT emp_name, salary FROM employees;
-```
-
----
-
-### 5. Retrieve employees earning more than 50,000
-
-```sql
-SELECT * FROM employees WHERE salary > 50000;
-```
-
----
-
-### 6. Retrieve employees who joined after 2022-01-01
-
-```sql
-SELECT * FROM employees WHERE join_date > '2022-01-01';
-```
-
----
-
-### 7. Fetch employees whose names start with 'A'
-
-```sql
-SELECT * FROM employees WHERE emp_name LIKE 'A%';
-```
-
----
-
-### 8. Fetch employees whose names end with 'n'
-
-```sql
-SELECT * FROM employees WHERE emp_name LIKE '%n';
-```
-
----
-
-### 9. Sort employees by salary (descending)
-
-```sql
-SELECT * FROM employees ORDER BY salary DESC;
-```
-
----
-
-### 10. Sort employees by department, then by name
-
-```sql
-SELECT * FROM employees ORDER BY dept_id, emp_name;
-```
-
----
-
-### 11. Find employees with NULL manager_id
-
-```sql
-SELECT * FROM employees WHERE manager_id IS NULL;
-```
-
----
-
-### 12. Replace NULL manager_id with 'N/A'
-
-```sql
-SELECT emp_name, IFNULL(manager_id, 'N/A') AS manager FROM employees;
-```
-
----
-
-### 13. Fetch first 5 employees
-
-```sql
-SELECT * FROM employees LIMIT 5;
-```
-
----
-
-### 14. Fetch employees between salary 40,000 and 70,000
-
-```sql
-SELECT * FROM employees WHERE salary BETWEEN 40000 AND 70000;
-```
-
----
-
-### 15. Fetch employees in departments 1, 2, or 3
-
-```sql
-SELECT * FROM employees WHERE dept_id IN (1,2,3);
-```
-
----
-
-## 🔹 Section 2: Aggregate Functions & GROUP BY (16–25)
-
-### 16. Get the total salary of employees
-
-```sql
-SELECT SUM(salary) AS total_salary FROM employees;
-```
-
----
-
-### 17. Get the average salary
-
-```sql
-SELECT AVG(salary) FROM employees;
-```
-
----
-
-### 18. Find minimum and maximum salaries
-
-```sql
-SELECT MIN(salary) AS min_salary, MAX(salary) AS max_salary FROM employees;
-```
-
----
-
-### 19. Count employees in each department
-
-```sql
-SELECT dept_id, COUNT(*) FROM employees GROUP BY dept_id;
-```
-
----
-
-### 20. Find average salary per department
-
-```sql
-SELECT dept_id, AVG(salary) FROM employees GROUP BY dept_id;
-```
-
----
-
-### 21. Departments with more than 5 employees
-
-```sql
-SELECT dept_id, COUNT(*)
-FROM employees
-GROUP BY dept_id
-HAVING COUNT(*) > 5;
-```
-
----
-
-### 22. Total salary expense per department
-
-```sql
-SELECT dept_id, SUM(salary)
-FROM employees
-GROUP BY dept_id;
-```
-
----
-
-### 23. Department with highest average salary
-
-```sql
-SELECT dept_id, AVG(salary) AS avg_salary
-FROM employees
-GROUP BY dept_id
-ORDER BY avg_salary DESC
-LIMIT 1;
-```
-
----
-
-### 24. Employees earning above departmental average
-
-```sql
-SELECT emp_name, salary, dept_id
-FROM employees e
-WHERE salary > (
-  SELECT AVG(salary) FROM employees WHERE dept_id = e.dept_id
-);
-```
-
----
-
-### 25. Employees with duplicate salaries
-
-```sql
-SELECT salary, COUNT(*)
-FROM employees
-GROUP BY salary
-HAVING COUNT(*) > 1;
-```
-
----
-
-## 🔹 Section 3: Joins Queries (26–35)
-
-### 26. Inner join employees with departments
-
-```sql
-SELECT e.emp_name, d.dept_name
-FROM employees e
-INNER JOIN departments d ON e.dept_id = d.dept_id;
-```
-
----
-
-### 27. Left join employees with departments
-
-```sql
-SELECT e.emp_name, d.dept_name
-FROM employees e
-LEFT JOIN departments d ON e.dept_id = d.dept_id;
-```
-
----
-
-### 28. Right join employees with departments
-
-```sql
-SELECT e.emp_name, d.dept_name
-FROM employees e
-RIGHT JOIN departments d ON e.dept_id = d.dept_id;
-```
-
----
-
-### 29. Full outer join (using UNION)
-
-```sql
-SELECT e.emp_name, d.dept_name
-FROM employees e
-LEFT JOIN departments d ON e.dept_id = d.dept_id
-UNION
-SELECT e.emp_name, d.dept_name
-FROM employees e
-RIGHT JOIN departments d ON e.dept_id = d.dept_id;
-```
-
----
-
-### 30. Self join – fetch employee and their manager
-
-```sql
-SELECT e.emp_name AS Employee, m.emp_name AS Manager
-FROM employees e
-LEFT JOIN employees m ON e.manager_id = m.emp_id;
-```
-
----
-
-### 31. Find employees working in 'Sales'
-
-```sql
-SELECT e.emp_name
-FROM employees e
-JOIN departments d ON e.dept_id = d.dept_id
-WHERE d.dept_name = 'Sales';
-```
-
----
-
-### 32. Employees without departments
-
-```sql
-SELECT e.emp_name
-FROM employees e
-LEFT JOIN departments d ON e.dept_id = d.dept_id
-WHERE d.dept_id IS NULL;
-```
-
----
-
-### 33. Employees with department and manager details
-
-```sql
-SELECT e.emp_name, d.dept_name, m.emp_name AS Manager
-FROM employees e
-JOIN departments d ON e.dept_id = d.dept_id
-LEFT JOIN employees m ON e.manager_id = m.emp_id;
-```
-
----
-
-### 34. Highest salary in each department (using join)
-
-```sql
-SELECT d.dept_name, MAX(e.salary) AS max_salary
-FROM employees e
-JOIN departments d ON e.dept_id = d.dept_id
-GROUP BY d.dept_name;
-```
-
----
-
-### 35. Department with no employees
-
-```sql
-SELECT d.dept_name
-FROM departments d
-LEFT JOIN employees e ON d.dept_id = e.dept_id
-WHERE e.emp_id IS NULL;
-```
-
----
-
-## 🔹 Section 4: Advanced Queries (36–50)
-
-### 36. Find the second highest salary
-
-```sql
-SELECT MAX(salary)
-FROM employees
-WHERE salary < (SELECT MAX(salary) FROM employees);
-```
-
----
-
-### 37. Nth highest salary
-
-```sql
-SELECT DISTINCT salary
-FROM employees e1
-WHERE N-1 = (
-  SELECT COUNT(DISTINCT salary)
-  FROM employees e2
-  WHERE e2.salary > e1.salary
-);
-```
-
----
-
-### 38. Top 5 highest paid employees
-
-```sql
-SELECT emp_name, salary
-FROM employees
-ORDER BY salary DESC
-LIMIT 5;
-```
-
----
-
-### 39. Third and fourth highest salaries
-
-```sql
-SELECT DISTINCT salary
-FROM employees
-ORDER BY salary DESC
-LIMIT 2,2;  -- Skip first two, fetch next two
-```
-
----
-
-### 40. Employees with salaries between top 10% and 20%
-
-```sql
-SELECT emp_name, salary
-FROM employees
-ORDER BY salary DESC
-LIMIT 10 OFFSET 10;
-```
-
----
-
-### 41. Employees who joined in the last 30 days
-
-```sql
-SELECT *
-FROM employees
-WHERE join_date >= CURDATE() - INTERVAL 30 DAY;
-```
-
----
-
-### 42. Employees hired in current year
-
-```sql
-SELECT *
-FROM employees
-WHERE YEAR(join_date) = YEAR(CURDATE());
-```
-
----
-
-### 43. Swap genders 'M' and 'F'
-
-```sql
-UPDATE employees
-SET gender = CASE
-  WHEN gender = 'M' THEN 'F'
-  WHEN gender = 'F' THEN 'M'
-END;
-```
-
----
-
-### 44. Delete employees with no department
-
-```sql
-DELETE FROM employees WHERE dept_id IS NULL;
-```
-
----
-
-### 45. Increase salary by 10% for Sales department
-
-```sql
-UPDATE employees
-SET salary = salary * 1.10
-WHERE dept_id = (SELECT dept_id FROM departments WHERE dept_name = 'Sales');
-```
-
----
-
-### 46. Retrieve employees with same salary but different departments
-
-```sql
-SELECT e1.emp_name, e1.salary, e1.dept_id
-FROM employees e1
-JOIN employees e2 ON e1.salary = e2.salary
-AND e1.dept_id <> e2.dept_id;
-```
-
----
-
-### 47. Find department with maximum employees
-
-```sql
-SELECT dept_id, COUNT(*) AS total
-FROM employees
-GROUP BY dept_id
-ORDER BY total DESC
-LIMIT 1;
-```
-
----
-
-### 48. Find employees with salary greater than their manager’s salary
-
-```sql
-SELECT e.emp_name, e.salary, m.emp_name AS Manager, m.salary AS manager_salary
-FROM employees e
-JOIN employees m ON e.manager_id = m.emp_id
-WHERE e.salary > m.salary;
-```
-
----
-
-### 49. Highest paid employee in company
-
-```sql
-SELECT emp_name, salary
-FROM employees
-ORDER BY salary DESC
-LIMIT 1;
-```
-
----
-
-### 50. Lowest paid employee in each department
-
-```sql
-SELECT dept_id, emp_name, salary
-FROM employees e
-WHERE salary = (
-  SELECT MIN(salary) FROM employees WHERE dept_id = e.dept_id
-);
-```
-
----
-
-# ✅ Summary
-
-- **Basic Queries:** SELECT, WHERE, LIKE, LIMIT (1–15)
-- **Aggregate Functions:** COUNT, AVG, SUM, GROUP BY, HAVING (16–25)
-- **Joins:** INNER, LEFT, RIGHT, SELF JOIN (26–35)
-- **Advanced:** Ranking, Subqueries, Correlated queries, Updates (36–50)
+**Document Version:** 1.0  
+**Last Updated:** January 2026  
+**Created for:** Java Backend Developers
