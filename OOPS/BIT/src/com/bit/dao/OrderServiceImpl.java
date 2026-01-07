@@ -9,11 +9,14 @@ public class OrderServiceImpl implements OrderService{
 	private InvoiceService invoiceService;
 	private NotificationService notificationService;
 	
+	//Dependency Injection
+	public OrderServiceImpl(InvoiceService invoiceService, NotificationService notificationService) {
+		this.invoiceService = invoiceService;
+		this.notificationService = notificationService;
+	}
+	
 	@Override
 	public Boolean saveOrder(Order order) {
-		invoiceService = new InvoiceServiceIpml();
-		notificationService = new NotificationServiceImpl();
-		
 		invoiceService.generateInvoice(order);
 		
 		System.out.println("Connecting to database....");

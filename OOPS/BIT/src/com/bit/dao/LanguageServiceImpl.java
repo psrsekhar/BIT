@@ -17,7 +17,7 @@ public class LanguageServiceImpl implements LanguageService {
 		List<Language> languageList = new LinkedList<Language>();
 		try {
 			// creating connection with MySQL
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ifi", "root", "Duck@!4#");
+			Connection connection = MySqlManager.getMySqlConnection();
 
 			// prepare sql query
 			String sql = "select id, name from ifi.language";
@@ -45,7 +45,7 @@ public class LanguageServiceImpl implements LanguageService {
 	public Language getLanguageById(Integer id) {
 		Language language = null;
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ifi", "root", "Duck@!4#");
+			Connection connection = MySqlManager.getMySqlConnection();
 			String sql = "select id, name from ifi.lang where id = " + id;
 			Statement statement = connection.createStatement();
 			ResultSet response = statement.executeQuery(sql);
