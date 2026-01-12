@@ -146,13 +146,158 @@ select customer_id, name from icici.customer order by balance desc LIMIT 1, 1;
 -- get number of customers each bank branch have
 select ifsc, count(ifsc) as customer_count from icici.customer group by ifsc;
 
--- JOIN
+-- get name, account number of the customer after login authentication
+select a.customer_id, b.name, b.account_number from 
+(select customer_id, user_name, password from icici.customer_login where 
+user_name = "samantha" and password = md5("Demo@!4#"))a
+LEFT JOIN
+(select customer_id, name, account_number from icici.customer)b
+ON a.customer_id = b.customer_id;
 
--- Aggregate functions
+-- (or)
+
+select a.customer_id, b.name, b.account_number from 
+(select customer_id, user_name, password from icici.customer_login where 
+user_name = "samantha" and password = md5("Demo@!4#"))a
+inner join
+icici.customer b
+ON a.customer_id = b.customer_id;
+
+-- list of all customers along with login information
+select a.customer_id, a.name, a.account_number, b.user_name, b.password from 
+icici.customer a
+left join
+icici.customer_login b
+ON a.customer_id = b.customer_id;
+
+-- get customers who have login credentials
+select a.customer_id, a.name, a.account_number, b.user_name, b.password from 
+icici.customer a
+inner join
+icici.customer_login b
+ON a.customer_id = b.customer_id;
+
+-- get transaction details of all customers
+select a.customer_id, a.name, a.account_number, b.transaction_id, b.amount, 
+b.transaction_type, b.transacted_on from
+icici.customer a
+left join
+icici.customer_transaction b
+ON a.customer_id = b.customer_id;
+
+-- get transaction details of a customer along with name of transaction type
+select b.transacted_on, b.transaction_type, c.name, b.amount from 
+(select customer_id, name from icici.customer where customer_id = 1) a
+inner join
+icici.customer_transaction b
+on a.customer_id = b.customer_id
+inner join 
+icici.transaction_type c
+on b.transaction_type = c.id;
+
+-- get all deposits made by customers
+select a.customer_id, a.name, a.account_number, b.transaction_id, b.amount, 
+b.transaction_type, b.transacted_on from
+icici.customer a
+inner join
+(select customer_id, transaction_id,amount,transaction_type, transacted_on from 
+ icici.customer_transaction where transaction_type = 2) b
+on a.customer_id = b.customer_id;
+
+-- Aggregate functions (sum(),count(), max(), min(),...)
+
+-- get total amount deposited in the bank
+select sum(amount) as total_amount from icici.customer_transaction 
+where transaction_type = 2;
+
+-- find total amount available in the bank
+select sum(balance) as bank_balance from icici.customer;
+
+-- find average customer balance
+select avg(balance) as bank_avg_balance from icici.customer;
+
+-- customer with lowest balance in the bank (Sub queries)
+select name, balance from icici.customer where 
+balance = (select min(balance) from icici.customer);
+
+-- find highest and lowest balance in the bank (aggregated functions can be nested)
+select min(balance), max(balance) from icici.customer;
+
+-- find total number of customers in the bank
+select count(balance) from icici.customer;
+
+-- find total amount available in each branch of a bank
+select ifsc, sum(balance) as bank_balance from icici.customer group by ifsc;
+
+-- find number of transactions a customer has done
+select customer_id, count(customer_id) from icici.customer_transaction 
+group by customer_id;
+
+-- find branches having more than one customer
+select ifsc, count(ifsc) from icici.customer group by ifsc having count(ifsc) > 1;
+
+-- find customers whose total transaction amount is more than 10,000
+select a.customer_id, a.name, sum(b.amount) as total_amount from
+icici.customer a
+inner join
+icici.customer_transaction b
+on a.customer_id = b.customer_id 
+group by a.customer_id having total_amount >= 10000;
 
 -- String functions
+select concat("samantha", "sairam"); -- to append a string
+select concat_ws("@", "samantha", "sairam"); -- to append a string with seperator
+-- to get number of characters in a string
+select length("samantha"), char_length("samantha"), character_length("samantha");
+-- to get first few characters
+select left("samantha", 3);
+-- to get last few characters
+select right("samantha", 3);
+-- to get substring
+select substr("samantha", 0, 2);
+-- to remove head spaces
+select ltrim(" samantha sairam ");
+-- to remove tail spaces
+select rtrim(" samantha sairam ");
+-- to remove space at any part of string
+select trim(" samantha sairam ");
+-- string in reverse order
+select reverse("Malayalam");
+-- lower case conversion (functions can be nested)
+select reverse(lcase("Malayalam")), reverse(lower("Malayalam"));
+-- upper case conversion
+select ucase("Malayalam"), upper("Malayalam");
+-- replace a substring
+select replace("samatha is married", "married", "re-married");
 
 -- Date & Time functions
+select now(); -- to get current date along with time
+select curdate(); -- to get current date
+select curtime(); -- to get current time
+select day(curdate()); -- to get current day
+select month(curdate()); -- to get current month
+select year(curdate()); -- to get current year
+select week(curdate()); -- to get week number in a year
+-- to add days to a date
+select curdate() as joining_date, 
+date_add(curdate(), INTERVAL 30 DAY) as expiry_date;
+-- difference between two dates
+select datedif(curdate(), date_add(curdate(), INTERVAL 30 DAY)) as expiry_date;
+-- to get date in (dd-mm-yyyy)
+select concat_ws("-", day(curdate()), month(curdate()), year(curdate()));
+select date_format(curdate(), "%d-%M-%Y"); -- 12-January-2026
+select date_format(curdate(), "%d-%M-%Y %W %p"); -- 12-January-2026 Monday P.M
+
+-- first day of a month
+select date_sub(curdate(), INTERVAL DAY(curdate())-1 DAY);
+-- last day of a month
+select last_day(curdate());
+
+
+
+
+
+
 
 
 
