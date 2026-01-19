@@ -293,8 +293,64 @@ select date_sub(curdate(), INTERVAL DAY(curdate())-1 DAY);
 -- last day of a month
 select last_day(curdate());
 
+-- user management (create)
+create user 'loan' identified by 'Demo@!4#';
+create user 'mb'@'localhost' identified by 'Demo@!43';
 
+-- granting access
+grant select, insert on icici.customer to 'loan';
+grant select, insert, update, delete, drop on icici.* to 'mb';
 
+-- to get access information of a user
+show grants for 'loan';
+
+-- revoke access
+revoke all privileges, grant option from 'loan';
+-- Before normalization
+create table if not exists icici.orders(
+	order_id   bigint auto_increment,
+	customer_id int,
+	product_id   text, -- comma seperated values
+	product_name text, -- comma seperated values
+	product_price text,-- comma seperated values
+	product_quantity text, -- comma seperated values
+	order_price decimal(4,2),
+	address text,
+	delivery_date datetime default current_timestamp
+);
+
+-- after 1NF (atomic values)
+create table if not exists icici.products(
+	product_id int auto_increment not null primary key,
+    name text not null,
+    price decimal(7,2) not null,
+    brand varchar(20) not null
+);
+create table if not exists icici.customers(
+	customer_id int auto_increment not null primary key,
+    name text not null,
+    email varchar(255) not null,
+    phone_number varchar(10) not null
+);
+create table if not exists icici.customer_address(
+	address_id int auto_increment not null primary key,
+    customer_id int not null, -- foreign key reference to icici.customers(customer_id)
+    address text null
+);
+create table if not exists icici.orders(
+	order_id bigint auto_increment not null primary key,
+	customer_id int not null, -- foreign key reference
+	order_price decimal(10,2) not null,
+    address_id int not null, -- foreign key reference
+	delivery_date datetime default current_timestamp
+);
+
+create table if not exists icici.order_items(
+	item_id int auto_increment not null primary key,
+	order_id bigint not null, -- foregin key reference to icici.orders(order_id)
+    product_id int not null, -- foregin key reference to icici.products(product_id)
+    quantity int not null
+);
 
 
 
