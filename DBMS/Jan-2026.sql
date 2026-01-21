@@ -352,8 +352,7 @@ create table if not exists icici.order_items(
     quantity int not null
 );
 
-
-
+select customer_id, name, account_number, balance from icici.customer;
 
 
 
