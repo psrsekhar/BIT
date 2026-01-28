@@ -1,4 +1,0 @@
-Polymorphism
-Method Hiding
-Access Modifiers
-Abstraction

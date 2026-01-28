@@ -1,2 +1,0 @@
-1,Samantha,5.0
-2,Trisha,4.9
