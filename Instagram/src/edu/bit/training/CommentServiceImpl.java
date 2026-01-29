@@ -8,28 +8,27 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PostServiceImpl implements PostService {
+public class CommentServiceImpl implements CommentService {
 
 	@Override
-	public List<Post> getAllPosts() {
-		List<Post> postList = new LinkedList<Post>();
-		
+	public List<Comment> getCommentByPostId(Integer postId) {
+		List<Comment> comments = new LinkedList<Comment>();
 		try {
 			//Authentication
 			Connection connection = MySqlManager.getConnection();
+			System.out.println("Connection: " + connection);
 			//Statement creation
 			Statement statement = connection.createStatement();
-			String sql = "select id, user_name, post_type, message from instagram.posts";
+			String sql = "select post_id, user_name, comment from instagram.post_comments where post_id = " + postId;
 			//Executing query
 			 ResultSet response = statement.executeQuery(sql);
 			 while(response.next()) {
-				 postList.add(new Post(response.getInt("id"), response.getString("user_name"), response.getString("post_type"), null, response.getString("message")));
+				 comments.add(new Comment(response.getInt("post_id"), response.getString("user_name"), response.getString("comment")));
 			 }
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
-		}
-		
-		return postList;
+		}		
+		return comments;
 	}
 
 }
